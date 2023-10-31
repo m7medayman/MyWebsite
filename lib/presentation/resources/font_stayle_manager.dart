@@ -9,12 +9,12 @@ class FontStyleManager {
   FontStyleManager(this.device);
 
   _getCommonStyle(double s, FontWeight w) {
-    return GoogleFonts.tiltNeon(
-        textStyle: TextStyle(
+    return TextStyle(
+      fontFamily: 'tilt',
       color: ColorManager.textColor,
       fontSize: s,
       fontWeight: w,
-    ));
+    );
   }
 
   getHeading1() {

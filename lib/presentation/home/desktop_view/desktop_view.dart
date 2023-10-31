@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:profile/presentation/home/desktop_view/about_me_section.dart';
+import 'package:profile/presentation/home/desktop_view/contact_me_section.dart';
+import 'package:profile/presentation/home/desktop_view/gallery_section.dart';
+import 'package:profile/presentation/home/desktop_view/hero_section.dart';
+import 'package:profile/presentation/home/desktop_view/skill_section.dart';
 import 'package:profile/presentation/resources/color_manager.dart';
 import 'package:profile/presentation/resources/image_manager.dart';
 import 'package:profile/presentation/resources/size_manager.dart';
@@ -13,6 +18,12 @@ class DesktopPageView extends StatefulWidget {
 }
 
 class _DesktopPageViewState extends State<DesktopPageView> {
+  final GlobalKey _heroKey = GlobalKey();
+  final GlobalKey _aboutMeKey = GlobalKey();
+  final GlobalKey _galleryKey = GlobalKey();
+  final GlobalKey _skillsKey = GlobalKey();
+  final GlobalKey _contactMeKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,18 +31,20 @@ class _DesktopPageViewState extends State<DesktopPageView> {
       appBar: AppBar(
         backgroundColor: ColorManager.primary,
         leading: Text(
-          '<Flutter>',
+          '<Flutter/>',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         leadingWidth: 200,
         actions: [
-          appBarWidget("About me"),
+          appBarWidget("Hero", _heroKey),
           _divider(),
-          appBarWidget("Skills"),
+          appBarWidget("About me", _aboutMeKey),
           _divider(),
-          appBarWidget("Gallery"),
+          appBarWidget("Skills", _skillsKey),
           _divider(),
-          appBarWidget("Contact me"),
+          appBarWidget("Gallery", _galleryKey),
+          _divider(),
+          appBarWidget("Contact me", _contactMeKey),
         ],
       ),
       body: SingleChildScrollView(
@@ -40,61 +53,20 @@ class _DesktopPageViewState extends State<DesktopPageView> {
             const SizedBox(
               height: 50,
             ),
-            getHero(context),
+            getHero(context, _heroKey),
             const SizedBox(
               height: 150,
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              width: double.maxFinite,
-              color: ColorManager.secondary,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(flex: 1, child: Lottie.asset(ImageManager.myLotti)),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: ColorManager.grey,
-                              borderRadius: BorderRadius.circular(17),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "More about me",
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                          StringManager.aboutMe1,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          strutStyle: StrutStyle(height: 2),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          StringManager.aboutMe3,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          strutStyle: StrutStyle(height: 2),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
+            getAboutMe(context, _aboutMeKey),
+            const SizedBox(
+              height: 100,
+            ),
+            getSkills(context, _skillsKey),
+            getGallery(context, _galleryKey),
+            const SizedBox(
+              height: 50,
+            ),
+            getContactMe(context, _contactMeKey)
           ],
         ),
       ),
@@ -110,77 +82,21 @@ class _DesktopPageViewState extends State<DesktopPageView> {
     );
   }
 
-  Padding appBarWidget(String t) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(child: Text(t)),
-    );
-  }
-
-  getHero(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "👋 Hi,I'm Mohamed ",
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                Text(
-                  StringManager.hiBody1,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.location_pin,
-                    color: ColorManager.textColor,
-                  ),
-                  title: Text(
-                    'Cairo,Egypt',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-                const SizedBox(
-                  height: 70,
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.flutter_dash),
-                    Icon(Icons.engineering),
-                    Icon(Icons.leaderboard)
-                  ],
-                )
-              ],
-            ),
-          ),
-          Expanded(
-              flex: 3,
-              child: FractionallySizedBox(
-                  widthFactor: 0.5, // Takes 50% of parent's width
-                  child: _myImage())),
-        ],
-      ),
-    );
-  }
-
-  SizedBox _myImage() {
-    return SizedBox(
-      height: 400,
-      child: AspectRatio(
-        aspectRatio: 16 / 900,
-        child: Image.asset(
-          ImageManager.myImage,
-          fit: BoxFit.contain,
-          width: SizeManager.s200,
-          height: SizeManager.s200,
-        ),
+  appBarWidget(String t, GlobalKey key) {
+    Color textColor = ColorManager.textColor;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          Scrollable.ensureVisible(key.currentContext!,
+              duration: const Duration(
+                  milliseconds:
+                      500), // specify the duration for the animation
+              curve: Curves.easeInOut);
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(child: Text(t)),
       ),
     );
   }

@@ -9,8 +9,8 @@ class ThemeManager {
     return ThemeData(
         primaryColor: ColorManager.primary,
         cardColor: ColorManager.secondary,
-        cardTheme: CardTheme(shadowColor: ColorManager.secondary),
-        iconTheme: IconThemeData(color: ColorManager.textColor),
+        cardTheme: const CardTheme(shadowColor: ColorManager.secondary),
+        iconTheme: const IconThemeData(color: ColorManager.textColor),
         textTheme: TextTheme(
           displayLarge: styleManager.getBody1(),
           displayMedium: styleManager.getBody1(),

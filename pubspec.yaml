@@ -37,6 +37,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
   lottie: ^2.7.0
+  percent_indicator: ^4.2.3
+  line_icons: ^2.0.3
+  url_launcher: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +67,8 @@ flutter:
   assets:
     - assets/images/MyPhoto.jpg
     - assets/images/lotti.json
+    - assets/images/clean_architecture_app.jpg
+    - assets/images/profile.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -76,11 +81,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: tilt
+      fonts:
+        - asset: assets/fonts/TiltNeon-Regular.ttf
+
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
